@@ -1,0 +1,12 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+int main(void){
+	char str[100];
+	int index = 0;
+	index = sprintf(str+index,"test%d",index);
+	puts(str);	//test0
+	index = sprintf(str+index,"test%d",index);
+	puts(str);	//test0test5
+	return 0;
+}
