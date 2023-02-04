@@ -1,0 +1,34 @@
+bool travel(int *a, int *b){
+    int i;
+    for (i=0; i<26; i++){
+        if (a[i] != b[i])
+            return 0;
+    }
+    return 1;
+}
+
+bool checkInclusion(char * s1, char * s2){
+    int *menu = calloc(26,sizeof(int));
+    int *menuTemp = calloc(26,sizeof(int));
+    int s1Size = 0;
+    int i;
+    while (*s1){
+        menu[(*s1) - 'a']++;
+        s1Size++;
+        s1++;
+    }
+    printf("%d", s1Size);
+    for (i=0; i<s1Size; i++){
+        if (!*(s2 + i)) return 0;
+        menuTemp[*(s2 + i) - 'a'] += 1;
+    }
+    if (travel(menu, menuTemp)) return 1;
+    while (*(s2 + i)){
+        menuTemp[*s2 - 'a']--;
+        menuTemp[*(s2 + i) - 'a']++;
+        if (travel(menu, menuTemp)) return 1;
+        s2++;
+    }
+
+    return 0;
+}
