@@ -1,0 +1,74 @@
+void indent(int index){
+    for (int i=0; i<index; i++){
+        printf("->");
+    }
+}
+bool com(char ** words, int wordsSize, int * order, int index){
+    if (wordsSize < 2){
+        indent(index);
+        printf("少於兩個單字喔, return 1\n");
+        return 1;
+    }
+    int head = 0;
+    int size = 1;
+    printf("\n");
+    indent(index);
+    printf("第%d個字母\n", index);
+    for (int i=0; i<wordsSize - 1; i++){
+        indent(index);
+        printf("第%d組單字跟第%d組單字比較\n", i, i + 1);
+        indent(index);
+        printf("%c,%c\n", words[i][index], words[i + 1][index]);
+        if (words[i][index] == 0){
+            indent(index);
+            printf("第%d組單字的第%d個字母不存在呢\n", i, index);
+            head++;
+        }
+        else if (words[i + 1][index] == 0){
+            indent(index);
+            printf("下一個不能沒有字母喔,return 0\n");
+            return 0;
+        }
+        else if (order[words[i][index] - 'a'] > order[words[i + 1][index] - 'a']){
+            indent(index);
+            printf("\n排序有問題喔\n");
+            return 0;
+        }
+        else if (order[words[i][index] - 'a'] < order[words[i + 1][index] - 'a']){
+            indent(index);
+            printf("小於喔進入下一層\n====================\n");
+            if (! com(&words[head], size, order, index + 1)){
+                indent(index);
+                printf("因為上一層return 0 所以我也return 0\n");
+                return 0;
+            }
+            indent(index);
+            printf("上一層圓滿達成\n");
+            head = i+1;
+            size = 1;
+        }
+        else{
+            indent(index);
+            printf("比較的字母相同喔\n");
+            size++;
+        }
+    }
+    indent(index);
+    printf("在嘗試最後的\n");
+    if (! com(&words[head], size, order, index + 1)){
+        indent(index);
+        printf("因為上一層return 0 所以我也return 0\n");
+        return 0;
+    }
+    indent(index);
+    printf("已經確認全部完成了，向上一層return 1\n");
+    return 1;
+}
+bool isAlienSorted(char ** words, int wordsSize, char * order){
+    int * temp = malloc(26 * sizeof(int));
+    for (int i = 0; i<26; i++){
+        temp[order[i] - 'a'] = i;
+    }
+    printf("================================================================");
+    return com(words, wordsSize, temp, 0);
+}
