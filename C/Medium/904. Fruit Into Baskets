@@ -1,0 +1,32 @@
+int totalFruit(int* fruits, int fruitsSize){
+    if (fruitsSize < 3) return fruitsSize;
+    int ans = 2;
+    int ansCom = 2;
+    int a = fruits[0], b = fruits[1];
+    int bSize;
+    int i;
+    if (a == b) bSize = 2;
+    else    bSize = 1;
+    for (i=2; i<fruitsSize; i++){
+        if (b == fruits[i]){
+            bSize++;
+            ansCom++;
+        }
+        else{
+            if (a == fruits[i]){
+                bSize = 1;
+                ansCom++;
+                a = b;
+                b = fruits[i];
+            }
+            else{
+                if (ans < ansCom)   ans = ansCom;
+                ansCom = bSize + 1;
+                bSize = 1;
+                a = b;
+                b = fruits[i];
+            }
+        }
+    }
+    return (ans < ansCom) ? ansCom : ans;
+}
