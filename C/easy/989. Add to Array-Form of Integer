@@ -1,0 +1,35 @@
+int* addToArrayForm(int* num, int numSize, int k, int* returnSize){
+    int d = 0;
+    int i;
+    *returnSize = numSize;
+    for (i = numSize - 1; i >= 0; i--){
+        if (!k){
+            break;
+        }
+        d = k % 10;
+        k /= 10;
+        num[i] = num[i] + d;
+        if (num[i] > 9){
+            num[i] -= 10;
+            k++;
+        }
+    }
+    if (i >= 0) return num;
+    int check = 1;
+    for (i=0; i<10; i++){
+        if (k < check)  break;
+        check *= 10;
+    }
+    *returnSize += i;
+    int * ans = malloc((*returnSize) * sizeof(int));
+    check = i;
+    for (i = check - 1; i >= 0; i--){
+        ans[i] = (k % 10);
+        k /= 10;
+    }
+    for (i = check; i<(*returnSize); i++){
+        ans[i] = num[i - check];
+    }
+    printf("return ans\n");
+    return ans;
+}
