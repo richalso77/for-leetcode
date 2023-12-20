@@ -1,0 +1,30 @@
+#include<stdlib.h>
+#include<stdio.h>
+
+int main(void){
+	int size = 3;
+	int ** a = calloc(1,sizeof(int*));
+	int i;
+	for (i=0;i<size;i++){
+		*a = calloc(size,sizeof(int*));
+		*(*a + i) = 5;
+		printf("第%d次: **a=%d\n",i,**a);
+	}
+	
+	printf("更改後\n");
+	
+	for (i=0;i<size;i++){
+		*(*a + i) = 5;
+		printf("第%d次: **a=%d\n",i,**a);
+	}
+}
+
+/*
+第0次: **a=5
+第1次: **a=0
+第2次: **a=0  由此可知宣告不可與賦予數值這件動作在同一迴圈,不然新賦予的值只存活在本次迴圈
+更改後
+第0次: **a=5
+第1次: **a=5
+第2次: **a=5 重新賦予數值後,**a的值就固定了
+*/
