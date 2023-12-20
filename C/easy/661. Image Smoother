@@ -1,0 +1,47 @@
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+typedef struct{
+    int val;
+    int dev;
+} count;
+
+int** imageSmoother(int** img, int imgSize, int* imgColSize, int* returnSize, int** returnColumnSizes) {
+    *returnSize = imgSize;
+    *returnColumnSizes = calloc(imgSize, sizeof(int*));
+    for (int i=0;i<imgSize;i++){
+        *(*returnColumnSizes + i) = calloc(*returnSize, sizeof(int));
+    }
+    for (int i=0;i<imgSize;i++){
+        *(*returnColumnSizes + i) = *imgColSize;
+    }
+//
+    int ** ans = calloc(imgSize, sizeof(int*));
+    count ** check = calloc(imgSize+2, sizeof(count*));
+    for (int i=0;i<imgSize;i++){
+        *(ans + i) = calloc(*imgColSize, sizeof(int));
+    }
+    for (int i=0;i<imgSize+2;i++){
+        *(check + i) = calloc(*imgColSize+2, sizeof(count));
+    }
+
+    for (int i=0;i<imgSize;i++){
+        for (int j=0;j<*imgColSize;j++){
+            for (int y=-1;y<2;y++){
+                for (int x=-1;x<2;x++){
+                    check[i + y + 1][j + x + 1].val += img[i][j];
+                    check[i + y + 1][j + x + 1].dev++;
+                }
+            }
+        }
+    }
+
+    for (int i=0;i<imgSize;i++){
+        for (int j=0;j<*imgColSize;j++){
+            ans[i][j] = check[i + 1][j + 1].val / check[i + 1][j + 1].dev;
+        }
+    }
+    return ans;
+}
