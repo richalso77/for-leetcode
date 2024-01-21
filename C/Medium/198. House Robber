@@ -1,0 +1,14 @@
+int rob(int* nums, int numsSize) {
+    int rob = 0;
+    int norob = 0;
+    for (int i=0;i<numsSize;i++){
+        int newRob = norob + nums[i];
+        int newNorob;
+        if (rob > norob)    newNorob = rob;
+        else    newNorob = norob;
+        rob = newRob;
+        norob = newNorob;
+    }
+    if (rob > norob)    return rob;
+    return norob;
+}
