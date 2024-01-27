@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        printf("\n開始\n");
+        if (target == nums[0])  return 0;
+        int n = nums.size();
+        if (n < 2)  return -1;
+        int start = findStart(nums, 0, n-1);
+        int ans;
+        if (start == 0){
+            ans = findAns(nums, 1, n - 1, target);
+            if (ans)    return ans;
+            return -1;
+        }
+
+        printf("[");
+
+        for (int i = 0; i < n; i++){
+            printf("%d,", nums[i]);
+        }
+
+        printf("]\n");
+        ans = findAns(nums, 1, start - 1, target);
+        if (ans)    return ans;
+        ans = findAns(nums, start, n - 1, target);
+        if (ans)    return ans;
+        return -1;
+    }
+
+    int findStart(vector<int>& nums, int start, int end){
+        if (end == start)   return 0;
+        if (nums[start] < nums[end]){
+            return 0;
+        }
+        if (end - start == 1)   return end;
+        
+        return findStart(nums, start, (start + end)/2) + findStart(nums, (start + end)/2, end);
+        
+    }
+
+    int findAns(vector<int>& nums, int start, int end, int target){
+        printf("\n===\nstart=%d, end=%d\n", start, end);
+        printf("target=%d\n", target);
+        if (nums[end] < target)  return 0;
+        if (nums[end] == target)  return end;
+        if (nums[start] > target)  return 0;
+        if (nums[start] == target)  return start;
+        if (end <= start)    return 0;
+        printf("\n=.1==\nstart=%d, end=%d\n", start + 1, (start + end) / 2 - 1);
+        int ans = findAns(nums, start + 1, (start + end) / 2 - 1, target);
+        if (ans)    return ans;
+        ans = findAns(nums, (start + end) / 2, end - 1, target);
+        return ans;
+    }
+};
