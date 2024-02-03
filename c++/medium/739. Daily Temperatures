@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        deque<int> check;
+        vector<int> ans(temperatures.size(), 0);
+
+        for (int i = temperatures.size() - 1; i >= 0; i--){
+            while (check.size() && temperatures[i] >= temperatures[check.front()]){
+                check.pop_front();
+            }
+            if (check.size()){
+                ans[i] = check.front() - i;
+            }
+            else{
+                ans[i] = 0;
+            }
+            check.push_front(i);
+        }
+        return ans;
+    }
+};
