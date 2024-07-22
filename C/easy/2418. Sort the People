@@ -1,0 +1,43 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+
+void exchange(char** names, int* heights, int a, int b){
+    int temp = heights[a];
+    char* temp2 = names[a];
+    heights[a] = heights[b];
+    names[a] = names[b];
+
+    heights[b] = temp;
+    names[b] = temp2;
+}
+
+void change(char** names, int* heights, int left, int right){
+    if (left >= right)  return;
+    int tempL = left + 1;
+    int tempR = right;
+    int key = heights[left];
+    while(1){
+        while(tempL <= right){
+            if (heights[tempL] < key)   break;
+            tempL++;
+        }
+        while(tempR > left){
+            if (heights[tempR] > key)   break;
+            tempR--;
+        }
+        if (tempL > tempR)  break;
+        exchange(names, heights, tempL, tempR);
+    }
+
+    exchange(names, heights, left, tempR);
+    change(names, heights, left, tempR - 1);
+    change(names, heights, tempR + 1, right);
+}
+
+char** sortPeople(char** names, int namesSize, int* heights, int heightsSize, int* returnSize) {
+    *returnSize = namesSize;
+    change(names, heights, 0, namesSize - 1);
+    int i;
+    return names;
+}
