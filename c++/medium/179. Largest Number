@@ -1,0 +1,23 @@
+using namespace std;
+class Solution {
+
+public:
+
+    string largestNumber(vector<int>& nums) {
+        vector<string> strList;
+        string ans = "";
+        ostringstream ss;
+        for (const int &n : nums){
+            strList.push_back(to_string(n));
+        }
+        sort(strList.begin(), strList.end(), [](const string &a, const string &b){
+            return a + b > b + a;
+        });
+        for (const string &s: strList){
+            ss << s;
+        }
+        ans = ss.str();
+        if (ans[0] == '0')    return "0";
+        return ans;
+    }
+};
