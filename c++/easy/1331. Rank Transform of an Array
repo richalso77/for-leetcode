@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<int> arrayRankTransform(vector<int>& arr) {
+        vector<int> sortedArray = arr;
+        std::sort(sortedArray.begin(), sortedArray.end());
+        unordered_map<int, int> rankMap;
+
+        int rank = 1;
+        for (int &n :sortedArray){
+            if (rankMap.find(n) == rankMap.end()) rankMap[n] = rank++;
+        }
+
+        int size = arr.size();
+        for (int i = 0; i < size; i++){
+            arr[i] = rankMap[arr[i]];
+        }
+        return arr;
+    }
+};
