@@ -1,0 +1,19 @@
+class Solution {
+public:
+    bool canArrange(vector<int>& arr, int k) {
+        unordered_map<int, int> check;
+        int n = arr.size();
+        for (int i = 0; i < n; i++){
+            int temp = ((arr[i] % k) + k) % k;
+            if (check.find(k - temp) == check.end()){
+                check.find(temp) == check.end() ? check[temp] = 1 : check[temp]++;
+            }
+            else{
+                check[k - temp] == 1 ? check.erase(k - temp) : check[k - temp]--;
+            }
+        }
+        check[0] = 1;
+        check[k] = 1;
+        return check.size() == 2 ? true : false;
+    }
+};
