@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool areSentencesSimilar(string sentence1, string sentence2) {
+        vector<string> a, b;
+        string temp;
+        istringstream stream1(sentence1);
+        istringstream stream2(sentence2);
+        while (stream1 >> temp){
+            a.push_back(temp);
+        }
+        while (stream2 >> temp){
+            b.push_back(temp);
+        }
+        
+        int aBegin = 0, aEnd = a.size();
+        int bBegin = 0, bEnd = b.size();
+
+        for(; aBegin < aEnd && bBegin < bEnd; aBegin++, bBegin++){
+            if (a[aBegin] != b[bBegin]) break;
+        }
+
+        if(aBegin == aEnd || bBegin == bEnd)    return true;
+
+        for(; aEnd > aBegin && bEnd > bBegin; aEnd--, bEnd--){
+            if (a[aEnd - 1] != b[bEnd - 1]) break;
+        }
+
+        if (aEnd == aBegin || bEnd == bBegin)   return true;
+        return false;
+    }
+};
