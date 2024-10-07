@@ -1,0 +1,138 @@
+
+class AllOne {
+    struct node{
+        int num;
+        unordered_set<string> keys;
+        node * pre;
+        node * next;
+        node(int n) :num(n), keys(), pre(nullptr), next(nullptr){}
+    };
+
+    void insesrtNode(node* preNode, node* newNode){
+        newNode->pre = preNode;
+        newNode->next = preNode->next;
+        preNode->next = newNode;
+        newNode->next->pre = newNode;
+    }
+
+    void deleteNode(node* delNode){
+        delNode->pre->next = delNode->next;
+        delNode->next->pre = delNode->pre;
+        delete delNode;
+    }
+
+    unordered_map<string, int> keyGetNum;
+    unordered_map<int, node*> numGetNode;
+    node * head;    //biggest
+    node * tail;    //smallest
+
+public:
+    AllOne() {
+        head = new node(0);    
+        tail = new node(10000);    
+        head->next = tail;
+        tail->pre = head;
+        head->keys.insert("");
+        tail->keys.insert("");
+        numGetNode[0] = head;
+    }
+    
+    void inc(string key) {
+        int newNum;
+        auto it = keyGetNum.find(key);
+        if (it == keyGetNum.end()){
+            keyGetNum[key] = 1;
+            newNum = 1;
+        }
+        else{
+            newNum = ++it->second;
+        }
+
+        if (numGetNode.find(newNum) == numGetNode.end()){
+            numGetNode[newNum] = new node(newNum);
+            numGetNode[newNum]->keys.insert(key);
+            insesrtNode(numGetNode[newNum - 1], numGetNode[newNum]);
+        }
+        else{
+            numGetNode[newNum]->keys.insert(key);
+        }
+
+        if (newNum != 1){
+            numGetNode[newNum - 1]->keys.erase(key);
+            if(numGetNode[newNum - 1]->keys.empty()){
+                deleteNode(numGetNode[newNum - 1]);
+                numGetNode.erase(newNum - 1);
+            }
+        }
+
+    }
+    
+    void dec(string key) {
+        int newNum;
+        newNum = keyGetNum[key] - 1;
+        if (newNum == 0){
+            keyGetNum.erase(key);
+        }
+        else{
+            keyGetNum[key]--;
+        }
+
+        if (numGetNode.find(newNum) == numGetNode.end()){
+            numGetNode[newNum] = new node(newNum);
+            numGetNode[newNum]->keys.insert(key);
+            insesrtNode(numGetNode[newNum + 1]->pre, numGetNode[newNum]);
+        }
+        else{
+            numGetNode[newNum]->keys.insert(key);
+        }
+
+        numGetNode[newNum + 1]->keys.erase(key);
+        if(numGetNode[newNum + 1]->keys.empty()){
+            deleteNode(numGetNode[newNum + 1]);
+            numGetNode.erase(newNum + 1);
+        }
+
+        if (newNum == 0){
+            head->keys.erase(key);
+        }
+    }
+    /*
+    void test(){
+        auto temp = head;
+        while(temp != nullptr){
+            printf("t%d:\n",temp->num);
+            for (auto& key: temp->keys){
+                cout << key << endl;
+            }
+            temp = temp->next;
+        }
+        printf("====keyGetNum===\n");
+        for (auto& pair: keyGetNum){
+            cout << pair.first << ',' << pair.second << endl;
+        }
+        printf("====numGetNode===\n");
+        for (auto& pair: numGetNode){
+            cout << pair.first << ',' << pair.second << endl;
+        }
+        printf("====end===\n");
+    }
+*/
+    string getMaxKey() {
+        //test();
+        return *tail->pre->keys.begin();
+    }
+    
+    string getMinKey() {
+        //test();
+        return *head->next->keys.begin();
+    }
+};
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne* obj = new AllOne();
+ * obj->inc(key);
+ * obj->dec(key);
+ * string param_3 = obj->getMaxKey();
+ * string param_4 = obj->getMinKey();
+ */
