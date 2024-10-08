@@ -1,0 +1,75 @@
+class MyCalendar {
+    struct booked{
+        int start;
+        int end;
+        booked * pre;
+        booked * next;
+    };
+
+    void insertBooked(booked * a, booked * b){
+        b->next = a->next;
+        b->pre = a;
+        a->next = b;
+        b->next->pre = b;
+    }
+
+    void mergeBooked(booked * a, booked * b){
+        if (a->end == b->start){
+            a->end = b->end;
+            a->next = b->next;
+            delete b;
+            a->next->pre = a;
+        }
+    }
+
+    booked * travel(booked * head, int start, int end){
+        booked * temp = head;
+        while (temp != nullptr){
+            if (start >= temp->end){
+                temp = temp->next;
+                continue;
+            }
+            else if (end > temp->start){
+                return nullptr;
+            }
+            else{
+                return temp->pre;
+            }
+        }
+        return nullptr;
+    }
+    booked * head;
+    booked * tail;
+    
+public:
+    MyCalendar() {
+        head = new booked();
+        tail = new booked();
+        head->start = -2;
+        head->end = -1;
+        tail->start = 1000000000 + 1;
+        tail->end = 1000000000 + 2;
+        head->next = tail;
+        head->pre = nullptr;
+        tail->next = nullptr;
+        tail->pre = head;
+    }
+    
+    bool book(int start, int end) {
+        booked * temp = travel(head, start, end);
+        if (temp == nullptr)    return false;
+        booked * newBooked = new booked();
+        newBooked->start = start;
+        newBooked->end = end;
+        insertBooked(temp, newBooked);
+        mergeBooked(temp->next, temp->next->next);
+        mergeBooked(temp, temp->next);
+        return true;
+    }
+};
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar* obj = new MyCalendar();
+ * bool param_1 = obj->book(start,end);
+ */
