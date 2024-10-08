@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int minLength(string s) {
+        stack<char> finished;
+        finished.push('0'); //讓finished不為空
+        for(char & c : s){
+            if ((c == 'B' && finished.top() == 'A') || (c == 'D' && finished.top() == 'C')){
+                finished.pop();
+            }
+            else{
+                finished.push(c);
+            }
+        }
+        return finished.size() - 1;
+    }
+};
